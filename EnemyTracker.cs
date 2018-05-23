@@ -21,20 +21,22 @@ public class EnemyTracker : MonoBehaviour
 	EnemySpawned enemyToAdd;
 	EnemySpawned currentlySelected; //when called to find target, this is used
 	GameObject towerCalling; //tower calling the function
+    float towerRange;
 	#endregion
 	
 	
 	public void Start()
 	{
-				currentEnemies = new currentEnemies;
+    	currentEnemies = new currentEnemies();
+        
 	}
 	
 	
 	//call function when an enemy spawns 
 	//possibly best to do this with a unity event for disentanglement.
-	public void OnEnemySpawn(var arg0
+	public void OnEnemySpawn(var arg0)
 	{	
-		EnemyList(arg0 /*TODO correct later*/)
+		EnemyList(arg0 /*TODO correct later*/);
 	}
 	
 	private void EnemyListAdd(GameObject enemyToSpawn)
@@ -59,6 +61,7 @@ public class EnemyTracker : MonoBehaviour
 	{
 		currentlySelected = null;
 		
+        
 		foreach(EnemySpawned e in currentEnemies)
 		{
 			if(currentlySelected.GameObject == null)
