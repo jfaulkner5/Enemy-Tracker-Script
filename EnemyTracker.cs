@@ -72,54 +72,59 @@ public class EnemyTracker : MonoBehaviour
 			
 			else if(e.spawnedEnemy == null)
 			{
-				currentEnemies.RemoveAt(e);
+				currentEnemies.Remove(e);
 				break;
 			}
 			
+            //Targeting mode is changed here
 			else
 			{
-				//TODO add more setting here for methods of targetting.
-				if(e.CurrentAge > currentlySelected.CurrentAge && e.DistToTower < 15 /*change to var tower range*/)
-				{
-					currentlySelected = e;
-				}		
-			}
+                switch (targetMode)
+                {
+                    case targetMode.closest:
+                        if (e.DistToTower < currentlySelected.DistToTower && e.DistToTower < towerRange)
+                        {
+                            currentlySelected = e;
+                        }
+                        break;
+
+                    case targetMode.lowestHealth:
+                            currentlySelected = currentEnemies.Max();
+                        break;
+
+                    case targetMode.highestHealth:
+                            currentlySelected = currentEnemies.Max();
+                        break;
+
+                    case targetMode.furthest:
+                            if (e.CurrentAge > currentlySelected.CurrentAge && e.DistToTower < towerRange)
+                            {
+                                currentlySelected = e;
+                            }
+                        break;
+
+                }
+
+            }
 		}
 		return currentlySelected.spawnedEnemy;
+
+
 	}
-	
-	public void TargetingType()
-	{
-		switch (targetMode)
-		{
-			case targetMode.closest:
-				
-				break;
-				
-			case targetMode.lowestHealth:
-					break;
-			
-			case targetMode.highestHealth:
-				break;
-				
-			case targetMode.furthest:
-				break;
-				
-		}	
-	}
+
 	
 	//changes targeting credentials for switch in TargetingType()
 	public enum	targetMode
 	{
-		closest:
-		lowestHealth:
-		highestHealth:
+		closest,
+		lowestHealth,
+		highestHealth,
 		furthest
 	}	
 }
 
 //Stores data for enemies spawned and when etc 
-public class EnemySpawned
+public class EnemySpawned : IComparable<EnemySpawned>
 {
     public GameObject spawnedEnemy;
     //TODo can I set this to only be set once?
