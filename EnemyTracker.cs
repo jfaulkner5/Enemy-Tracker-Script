@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public class EnemyTracker : MonoBehaviour
 {
@@ -130,14 +132,34 @@ public class EnemySpawned
 		}
 	}
 
-    //Removes the need to create new variables when temp storing distance to a tower 
+    private float _currentHealth;
+    public float CurrentHealth
+    {
+        get
+        {
+            
+            _currentHealth = spawnedEnemy.Health;
+            return _currentHealth;
+        }
+    }
+
     private float _distToTower;
     public float DistToTower
+    {
+        get
         {
-            get
-            {
-               _distToTower = Vector3.Distance(towerCalling.transform.position, spawnedEnemy.transform.postition);
-               return _distToTower;
-            }
+            _distToTower = Vector3.Distance(towerCalling.transform.position, spawnedEnemy.transform.postition);
+            return _distToTower;
         }
+    }
+
+    int IComparable<EnemySpawned>.CompareTo(EnemySpawned other)
+    {
+        if (other.CurrentHealth > this.CurrentHealth)
+            return -1;
+        else if (other.CurrentHealth == this.CurrentHealth)
+            return 0;
+        else
+            return 1;
+    }
 }
